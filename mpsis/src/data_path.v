@@ -5,11 +5,11 @@ module data_path (
 	input           reset
 	);
 
+    reg		[6:0]	PC;
 	wire	[31:0]	command;
 	wire	[31:0]	data[0:3];
 	wire			comp;
 	wire    [31:0]  mul[0:5];
-	reg		[5:0]	PC;
 	wire	[31:0]	imm_I;
 	wire	[31:0]	imm_S;
 	wire	[31:0]	imm_J;
@@ -97,11 +97,7 @@ module data_path (
 
     assign  imm_I = {{20{command[31]}}, command[31:20]};
     assign  imm_S = {{20{command[31]}}, command[31:25], command[11:7]};
-    assign  imm_J = {{12{command[31]}}, command[31], command[19:12], command[20], command[30:21]};
-    assign  imm_B = {{20{command[31]}}, command[31], command[7], command[30:25], command[11:8]};
-	//assign	imm_I = (command[31] ? 'hffff_ffff ^ (~command[31:20]) : command[31:20]);
-	//assign	imm_S = (command[31] ? 'hffff_ffff ^ (~{command[31:25], command[11:7]}) : {command[31:25], command[11:7]});
-	//assign	imm_J = (command[31] ? 'hffff_ffff ^ (~{command[31], command[19:12], command[20], command[30:21]}) : {command[31], command[19:12], command[20], command[30:21]});
-	//assign	imm_B = (command[31] ? 'hffff_ffff ^ (~{command[31], command[7], command[30:25], command[11:8]}) : {command[31], command[7], command[30:25], command[11:8]});
-	
+    assign  imm_J = {{12{command[31]}}, command[31], command[19:12], command[20], command[30:21], 1'b0};
+    assign  imm_B = {{20{command[31]}}, command[31], command[7], command[30:25], command[11:8], 1'b0};
+
 endmodule
