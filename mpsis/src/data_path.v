@@ -1,11 +1,22 @@
 `timescale 1ns / 1ps
 
-module data_path (
+module miriscv_core (
 	input           clk,
-	input           reset
+	input           reset,
+
+	input	[31:0]	instr_rdata_i, 
+	output	[31:0]	instr_addr_o,
+
+	input	[31:0]	data_rdata_i,
+	output			data_req_o,
+	output			data_we_o,
+	output	[3:0]	data_be_o,
+	output	[31:0]	data_addr_o, 
+	output	[31:0]	data_wdata_o
 	);
 
-    reg		[6:0]	PC;
+    reg		[31:0]	PC;
+    wire			stall;
 	wire	[31:0]	command;
 	wire	[31:0]	data[0:3];
 	wire			comp;
@@ -44,10 +55,10 @@ module data_path (
 		.jalr_o(jalr_o)
 	);
 
-	ram ram_one(
+	/*ram ram_one(
 			.ad(PC),
 			.rd(command)
-		);
+		);*/
 	
 	register_file   regfile_one(
 			.clk(clk),
@@ -69,25 +80,48 @@ module data_path (
 			.comparison_result_o(comp)
 		);
 
-	data_memory	dmem_one(
+	/*data_memory	dmem_one(
 			.clk(clk),
 			.we(mem_we_o),
 			.i({mem_req_o, mem_size_o}),
 			.wd(data[1]),
 			.ad(data[2]),
 			.rd(data[3])
+		);*/
+
+	miriscv_lsu	mlsu_one(
+			.clk_i(clk),
+			.resetn_i(reset),
+			
+			.lsu_addr_i(data[2]),
+			.lsu_we_i(mem_we_o),
+			.lsu_size_i(mem_size_o),
+			.lsu_data_i(data[1]),
+			.lsu_req_i(mem_we_o),
+			.lsu_stall_req_o(stall),
+			.lsu_data_o(data[3]),
+
+			.data_rdata_i(data_rdata_i),
+			.data_req_o(data_req_o),
+			.data_we_o(data_we_o),
+			.data_be_o(data_be_o),
+			.data_addr_o(data_addr_o),
+			.data_wdata_o(data_wdata_o)
 		);
 
 	always @(posedge clk)
 	begin
 		if (reset)
 			PC <= 0;
-		else
+		else if (!stall)
 			PC <= mul[5];
 	end
 	
-	assign mul[0] = ex_op_a_sel_o == 0 ? data[0] : (ex_op_a_sel_o == 1 ? PC : 0);
-	assign mul[1] = ex_op_b_sel_o == 0 ? data[1] : (ex_op_b_sel_o == 1 ? imm_I : 
+	assign	command = instr_rdata_i;
+	assign	instr_addr_o = PC;
+
+	assign	mul[0] = ex_op_a_sel_o == 0 ? data[0] : (ex_op_a_sel_o == 1 ? PC : 0);
+	assign	mul[1] = ex_op_b_sel_o == 0 ? data[1] : (ex_op_b_sel_o == 1 ? imm_I : 
 					(ex_op_b_sel_o == 2 ? {command[31:12], 12'd0} : 
 					(ex_op_b_sel_o == 3 ? imm_S : 'd4)));
 	assign  mul[2] = wb_src_sel_o ? data[3] : data[2];
