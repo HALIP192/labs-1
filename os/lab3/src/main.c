@@ -42,7 +42,10 @@ int	main(int argc, char **argv)
 	int		seconds;
 	
 	if (argc == 1)
+	{
 		printf("You don't input arguments\n");
+		return (0);
+	}
 	if (argc == 2 && !strncmp("-h", argv[1], 2))
 	{
 		ft_help();
