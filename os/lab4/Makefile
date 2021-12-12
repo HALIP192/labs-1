@@ -31,3 +31,6 @@ fclean:	clean
 	rm -rf $(SERVER) $(CLIENT)
 
 re:	fclean all
+	rm -rf output_ser input_ser
+	touch output_ser
+	touch input_ser

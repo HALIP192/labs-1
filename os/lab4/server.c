@@ -55,8 +55,8 @@ void	*server(void *shbuf) {
 			fprintf(stderr, "error: cann't accept client.\n");
 			exit(-1);
 		}
-		else
-			SERVER_INFO("client was connected");
+	//	else
+			//SERVER_INFO("client was connected");
 		char *request = malloc(WEBBUF_SIZE);
 		char *response = malloc(WEBBUF_SIZE);
 		char *html = malloc(WEBBUF_SIZE);
@@ -67,11 +67,11 @@ void	*server(void *shbuf) {
 		{
  			memset(request, 0, WEBBUF_SIZE);
  			if (recv(cfd, request, WEBBUF_SIZE, 0) == -1) {
- 				SERVER_INFO("connection was closed");
+ 			//	SERVER_INFO("connection was closed");
  				break;
  			} 
- 			else
- 				SERVER_INFO("client request:\n%s", request);
+ 			//else
+ 			//	SERVER_INFO("client request:\n%s", request);
 			memset(response, 0, WEBBUF_SIZE);
 			switch (http_parse_request(request)) {
 				case HTTP_REQ_INDEX_HTML:
@@ -101,10 +101,10 @@ void	*server(void *shbuf) {
 				break;
 			}
 			if (send(cfd, response, strlen(response), 0) == -1) {
- 				SERVER_INFO("connection was closed");
+ 				//SERVER_INFO("connection was closed");
 				break;
-			} else
-				SERVER_INFO("server response:\n%s", response);
+			}// else
+				//SERVER_INFO("server response:\n%s", response);
 		}
 		free (request);
 		free (response);

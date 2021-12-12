@@ -20,7 +20,6 @@ int		main(void)
 	memset(buff, 0, STDIN_DATA_SIZE);
 	sbuf->mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(sbuf->mutex, NULL);
-	printf("main was started\n");
 	if (pthread_create(&thread, NULL, server, sbuf) != 0)
 	{
 		fprintf(stderr, "error: pthread_create was failed.\n");

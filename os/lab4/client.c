@@ -9,7 +9,7 @@ pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int	ft_input_stdin(void)
 {
-	char	arr[30];
+	char	arr[20];
 	int		value;
 	size_t	len;
 
@@ -17,7 +17,7 @@ int	ft_input_stdin(void)
 	value = -1;
 	while (1)
 	{
-		gets(arr);
+		read(0, arr, 20);
 		value = atoi(arr + 6);
 		if (value < 0 && value > 3)
 		{
