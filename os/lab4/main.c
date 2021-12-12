@@ -29,10 +29,6 @@ int		main(void)
 	int a;
 	while (1)
 	{
-		a++;
-	}
-	while (1)
-	{
 
 		len_buf = read(0, buff, STDIN_DATA_SIZE);
 		buff[len_buf] = '\0';

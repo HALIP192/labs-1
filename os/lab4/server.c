@@ -75,7 +75,6 @@ void	*server(void *shbuf) {
 			memset(response, 0, WEBBUF_SIZE);
 			switch (http_parse_request(request)) {
 				case HTTP_REQ_INDEX_HTML:
-					printf("5---------------------------------------------------------------------------------------------\n");
 					f = open(INDEXHTML_PATH, O_RDONLY);
 					memset(html, 0, WEBBUF_SIZE);
 					read(f, html, WEBBUF_SIZE);
@@ -83,17 +82,13 @@ void	*server(void *shbuf) {
 					http_200OK(response, html);
 				break;
 				case HTTP_REQ_READDATA:
-					printf("4---------------------------------------------------------------------------------------------\n");
 					pthread_mutex_lock(sharedbuf->mutex);
-					printf("4.3---------------------------------------------------------------------------------------------\n");
 					http_200OK(response, sharedbuf->buf);
-					printf("4.2---------------------------------------------------------------------------------------------\n");
 					memset(sharedbuf->buf, 0, sharedbuf->bufsize);
 					pthread_mutex_unlock(sharedbuf->mutex);
 				break;
 				case HTTP_REQ_WRITEDATA:
 					datalen = http_find_data (request, &data);
-					printf("3---------------------------------------------------------------------------------------------\n");
 					if (datalen != -1) {
 						data[datalen] = '\n';
 						data[datalen + 1] = '\0';
@@ -102,17 +97,14 @@ void	*server(void *shbuf) {
 					http_200OK(response, "");
 				break;
 				case HTTP_REQ_OTHER:
-					printf("6---------------------------------------------------------------------------------------------\n");
 					http_200OK(response, "");
 				break;
 			}
-			printf("1---------------------------------------------------------------------------------------------\n");
 			if (send(cfd, response, strlen(response), 0) == -1) {
  				SERVER_INFO("connection was closed");
 				break;
 			} else
 				SERVER_INFO("server response:\n%s", response);
-			printf("2---------------------------------------------------------------------------------------------\n");
 		}
 		free (request);
 		free (response);
