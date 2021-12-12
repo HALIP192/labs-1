@@ -2,12 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "server.h"
-#inlcude "settings.h"
-
-void	*server(void *)
-{
-
-}
+#include "settings.h"
 
 int		main(void)
 {
