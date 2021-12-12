@@ -1,24 +1,26 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "server.h"
 #include "settings.h"
 
 int		main(void)
 {
 	pthread_t	thread;
-	t_shbuf		*sbuff;
+	t_shbuf		*sbuf;
 	char		buff[STDIN_DATA_SIZE + 1];
 	size_t		len_buf;
 
-	sbuff = (sbuf *)malloc(sizeof(t_shbuf));
+	sbuf = (t_shbuf *)malloc(sizeof(t_shbuf));
 	sbuf->bufsize = SHAREDBUF_SIZE;
 	sbuf->buf = (char *)malloc(sizeof(char) * sbuf->bufsize);
 	memset(sbuf->buf, 0, sbuf->bufsize);
 	memset(buff, 0, STDIN_DATA_SIZE);
 	sbuf->mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	printf("main was started\n");
-	if (ptread_create(&thread, NULL, server, NULL) != 0)
+	if (pthread_create(&thread, NULL, server, NULL) != 0)
 	{
 		fprintf(stderr, "error: pthread_create was failed.\n");
 		return (-1);

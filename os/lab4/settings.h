@@ -3,7 +3,8 @@
 # define STDIN_DATA_SIZE 128
 # define SHAREDBUF_SIZE 1024
 # define SRV_INFO 1 
-# define IP INADDR_ANY
+# define IP  INADDR_ANY
 # define PORT 80
 # define WEBBUF_SIZE 1024*32
+#define INDEXHTML_PATH "index.html"
 #endif 
