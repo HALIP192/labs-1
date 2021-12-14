@@ -10,9 +10,12 @@ int	main(void)
 		scanf("%d", &button);
 		if (button > 2)
 			return (0);
-		write(1, "BUTTON", 6);
-		write(1, button == 0? "0" : (button == 1 ? "1" : "2"), 1);
-		write(1, ": clicked\n", 10);
+		if (button == 0)
+			write(1, "BUTTON0: clicked\n", 17);
+		else if (button == 1)
+			write(1, "BUTTON1: clicked\n", 17);
+		else
+			write(1, "BUTTON2: clicked\n", 17);
 	}
 	return (0);
 }

@@ -17,7 +17,7 @@ int	ft_input_stdin(void)
 	value = -1;
 	while (1)
 	{
-		read(0, arr, 20);
+		read(0, arr, 17);
 		value = atoi(arr + 6);
 		if (value < 0 && value > 3)
 		{
