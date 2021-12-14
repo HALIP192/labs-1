@@ -5,12 +5,16 @@ SRC			=	\
 			http
 SERVER		=	server
 CLIENT		=	client
+BUTTON		=	buttons
 
 OBJ_DIR		=	obj
 OBJ_SERVER	=	${addprefix $(OBJ_DIR)/,$(SRC:=.o)}
 OBJ_CLIENT	=	${addprefix $(OBJ_DIR)/,$(CLIENT:=.o)}
+OBJ_BUTTON	=	${addprefix $(OBJ_DIR)/,$(BUTTON:=.o)}
 
-all:	$(OBJ_DIR) $(SERVER) $(CLIENT)
+all:	$(OBJ_DIR) $(SERVER) $(CLIENT) $(BUTTON)
+	touch output_ser
+	touch input_ser
 
 $(OBJ_DIR)/%.o:	%.c
 	$(CC) $< -c -o $@
@@ -24,13 +28,17 @@ $(SERVER):	$(OBJ_SERVER)
 $(CLIENT):	$(OBJ_CLIENT)
 	$(CC) $< -lpthread -g -o $@
 
+$(BUTTON):	$(OBJ_BUTTON)
+	$(CC) $< -lpthread -g -o $@
+
 clean:
-	rm -rf $(OBJ_SERVER) $(OBJ_CLIENT)
+	rm -rf $(OBJ_SERVER) $(OBJ_CLIENT) $(OBJ_BUTTON)
 
 fclean:	clean
-	rm -rf $(SERVER) $(CLIENT)
+	rm -rf output_ser input_ser
+	rm -rf $(SERVER) $(CLIENT) $(BUTTON)
 
 re:	fclean all
-	rm -rf output_ser input_ser
-	touch output_ser
-	touch input_ser
+
+start:	$(SERVER) $(CLIENT) $(BUTTON)
+	bash script.sh
